@@ -74,6 +74,7 @@
   
   [self checkForAndResolveCollisionsForPlayer:self.player forLayer:self.walls];
   [self handleHazardCollisions:self.player];
+  [self checkForWin];
 }
 
 - (void)checkForAndResolveCollisionsForPlayer:(Player *)player forLayer:(TMXLayer *)layer
@@ -265,5 +266,12 @@
   //6
   [self.view presentScene:[[GameLevelScene alloc] initWithSize:self.size]];
 }
+
+-(void)checkForWin {
+  if (self.player.position.x > 3130.0) {
+    [self gameOver:1];
+  }
+}
+
 
 @end
