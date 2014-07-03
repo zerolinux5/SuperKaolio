@@ -19,16 +19,29 @@
     return self;
 }
 
-- (void)update:(NSTimeInterval)delta {
-    //3
+- (void)update:(NSTimeInterval)delta
+{
     CGPoint gravity = CGPointMake(0.0, -450.0);
-    //4
     CGPoint gravityStep = CGPointMultiplyScalar(gravity, delta);
-    //5
+    //1
+    CGPoint forwardMove = CGPointMake(800.0, 0.0);
+    CGPoint forwardMoveStep = CGPointMultiplyScalar(forwardMove, delta);
+    
     self.velocity = CGPointAdd(self.velocity, gravityStep);
+    //2
+    self.velocity = CGPointMake(self.velocity.x * 0.9, self.velocity.y);
+    //3
+    //Jumping code goes here
+    if (self.forwardMarch) {
+        self.velocity = CGPointAdd(self.velocity, forwardMoveStep);
+    }
+    //4
+    CGPoint minMovement = CGPointMake(0.0, -450);
+    CGPoint maxMovement = CGPointMake(120.0, 250.0);
+    self.velocity = CGPointMake(Clamp(self.velocity.x, minMovement.x, maxMovement.x), Clamp(self.velocity.y, minMovement.y, maxMovement.y));
+    
     CGPoint velocityStep = CGPointMultiplyScalar(self.velocity, delta);
-    //6
-    //self.position = CGPointAdd(self.position, velocityStep);
+    
     self.desiredPosition = CGPointAdd(self.position, velocityStep);
 }
 
