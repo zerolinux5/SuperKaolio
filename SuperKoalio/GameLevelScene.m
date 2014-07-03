@@ -86,6 +86,11 @@
     CGRect playerRect = [player collisionBoundingBox];
     CGPoint playerCoord = [layer coordForPoint:player.desiredPosition];
     
+    if (playerCoord.y >= self.map.mapSize.height - 1) {
+      [self gameOver:0];
+      return;
+    }
+    
     NSInteger tileColumn = tileIndex % 3;
     NSInteger tileRow = tileIndex / 3;
     CGPoint tileCoord = CGPointMake(playerCoord.x + (tileColumn - 1), playerCoord.y + (tileRow - 1));
@@ -201,6 +206,8 @@
 
 - (void)handleHazardCollisions:(Player *)player
 {
+  if (self.gameOver) return;
+  
   NSInteger indices[8] = {7, 1, 3, 5, 0, 2, 6, 8};
   
   for (NSUInteger i = 0; i < 8; i++) {
