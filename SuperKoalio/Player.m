@@ -43,6 +43,7 @@
     
     if (self.mightAsWellJump && self.onGround) {
         self.velocity = CGPointAdd(self.velocity, jumpForce);
+        [self runAction:[SKAction playSoundFileNamed:@"jump.wav" waitForCompletion:NO]];
     } else if (!self.mightAsWellJump && self.velocity.y > jumpCutoff) {
         self.velocity = CGPointMake(self.velocity.x, jumpCutoff);
     }

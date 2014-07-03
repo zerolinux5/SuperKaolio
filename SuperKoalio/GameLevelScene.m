@@ -10,6 +10,7 @@
 #import "JSTileMap.h"
 #import "Player.h"
 #import "SKTUtils.h"
+#import "SKTAudio.h"
 
 @interface GameLevelScene()
 @property (nonatomic, strong) JSTileMap *map;
@@ -24,6 +25,7 @@
 
 -(id)initWithSize:(CGSize)size {
   if (self = [super initWithSize:size]) {
+    [[SKTAudio sharedInstance] playBackgroundMusic:@"level1.mp3"];
     self.userInteractionEnabled = YES;
     /* Setup your scene here */
     self.backgroundColor = [SKColor colorWithRed:.4 green:.4 blue:.95 alpha:1.0];
@@ -232,9 +234,9 @@
 }
 
 -(void)gameOver:(BOOL)won {
-  //1
   self.gameOver = YES;
-  //2
+  [self runAction:[SKAction playSoundFileNamed:@"hurt.wav" waitForCompletion:NO]];
+  
   NSString *gameText;
   if (won) {
     gameText = @"You Won!";
