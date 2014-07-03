@@ -32,6 +32,21 @@
     self.velocity = CGPointMake(self.velocity.x * 0.9, self.velocity.y);
     //3
     //Jumping code goes here
+    /*CGPoint jumpForce = CGPointMake(0.0, 310.0);
+    
+    if (self.mightAsWellJump && self.onGround) {
+        self.velocity = CGPointAdd(self.velocity, jumpForce);
+    }*/
+    
+    CGPoint jumpForce = CGPointMake(0.0, 310.0);
+    float jumpCutoff = 150.0;
+    
+    if (self.mightAsWellJump && self.onGround) {
+        self.velocity = CGPointAdd(self.velocity, jumpForce);
+    } else if (!self.mightAsWellJump && self.velocity.y > jumpCutoff) {
+        self.velocity = CGPointMake(self.velocity.x, jumpCutoff);
+    }
+    
     if (self.forwardMarch) {
         self.velocity = CGPointAdd(self.velocity, forwardMoveStep);
     }
