@@ -66,30 +66,24 @@
   [self checkForAndResolveCollisionsForPlayer:self.player forLayer:self.walls];
 }
 
-- (void)checkForAndResolveCollisionsForPlayer:(Player *)player forLayer:(TMXLayer *)layer {
-  //1
+- (void)checkForAndResolveCollisionsForPlayer:(Player *)player forLayer:(TMXLayer *)layer
+{
   NSInteger indices[8] = {7, 1, 3, 5, 0, 2, 6, 8};
+  player.onGround = NO;  ////Here
   for (NSUInteger i = 0; i < 8; i++) {
     NSInteger tileIndex = indices[i];
     
-    //2
     CGRect playerRect = [player collisionBoundingBox];
-    //3
-    //CGPoint playerCoord = [layer coordForPoint:player.position];
     CGPoint playerCoord = [layer coordForPoint:player.desiredPosition];
-    //4
+    
     NSInteger tileColumn = tileIndex % 3;
     NSInteger tileRow = tileIndex / 3;
     CGPoint tileCoord = CGPointMake(playerCoord.x + (tileColumn - 1), playerCoord.y + (tileRow - 1));
-    //5
+    
     NSInteger gid = [self tileGIDAtTileCoord:tileCoord forLayer:layer];
-    //6
-    if (gid) {
-      //7
+    if (gid != 0) {
       CGRect tileRect = [self tileRectFromTileCoords:tileCoord];
-      //8
       //NSLog(@"GID %ld, Tile Coord %@, Tile Rect %@, player rect %@", (long)gid, NSStringFromCGPoint(tileCoord), NSStringFromCGRect(tileRect), NSStringFromCGRect(playerRect));
-      //collision resolution goes here
       //1
       if (CGRectIntersectsRect(playerRect, tileRect)) {
         CGRect intersection = CGRectIntersection(playerRect, tileRect);
@@ -97,6 +91,8 @@
         if (tileIndex == 7) {
           //tile is directly below Koala
           player.desiredPosition = CGPointMake(player.desiredPosition.x, player.desiredPosition.y + intersection.size.height);
+          player.velocity = CGPointMake(player.velocity.x, 0.0); ////Here
+          player.onGround = YES; ////Here
         } else if (tileIndex == 1) {
           //tile is directly above Koala
           player.desiredPosition = CGPointMake(player.desiredPosition.x, player.desiredPosition.y - intersection.size.height);
@@ -111,9 +107,11 @@
           if (intersection.size.width > intersection.size.height) {
             //tile is diagonal, but resolving collision vertically
             //4
+            player.velocity = CGPointMake(player.velocity.x, 0.0); ////Here
             float intersectionHeight;
             if (tileIndex > 4) {
               intersectionHeight = intersection.size.height;
+              player.onGround = YES; ////Here
             } else {
               intersectionHeight = -intersection.size.height;
             }
@@ -126,13 +124,14 @@
             } else {
               intersectionWidth = -intersection.size.width;
             }
+            //5
             player.desiredPosition = CGPointMake(player.desiredPosition.x  + intersectionWidth, player.desiredPosition.y);
           }
         }
       }
     }
   }
-  //5
+  //6
   player.position = player.desiredPosition;
 }
 
