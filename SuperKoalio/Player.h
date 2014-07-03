@@ -10,5 +10,8 @@
 
 @interface Player : SKSpriteNode
 @property (nonatomic, assign) CGPoint velocity;
+@property (nonatomic, assign) CGPoint desiredPosition;
+
 - (void)update:(NSTimeInterval)delta;
+-(CGRect)collisionBoundingBox;
 @end

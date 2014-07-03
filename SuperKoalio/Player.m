@@ -28,7 +28,14 @@
     self.velocity = CGPointAdd(self.velocity, gravityStep);
     CGPoint velocityStep = CGPointMultiplyScalar(self.velocity, delta);
     //6
-    self.position = CGPointAdd(self.position, velocityStep);
+    //self.position = CGPointAdd(self.position, velocityStep);
+    self.desiredPosition = CGPointAdd(self.position, velocityStep);
+}
+
+- (CGRect)collisionBoundingBox {
+    CGRect boundingBox = CGRectInset(self.frame, 2, 0);
+    CGPoint diff = CGPointSubtract(self.desiredPosition, self.position);
+    return CGRectOffset(boundingBox, diff.x, diff.y);
 }
 
 @end
