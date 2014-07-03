@@ -13,6 +13,7 @@
 @interface GameLevelScene()
 @property (nonatomic, strong) JSTileMap *map;
 @property (nonatomic, strong) Player *player;
+@property (nonatomic, assign) NSTimeInterval previousUpdateTime;
 @end
 
 @implementation GameLevelScene
@@ -32,6 +33,21 @@
     
   }
   return self;
+}
+
+//1
+- (void)update:(NSTimeInterval)currentTime
+{
+  //2
+  NSTimeInterval delta = currentTime - self.previousUpdateTime;
+  //3
+  if (delta > 0.02) {
+    delta = 0.02;
+  }
+  //4
+  self.previousUpdateTime = currentTime;
+  //5
+  [self.player update:delta];
 }
 
 
