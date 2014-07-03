@@ -9,6 +9,7 @@
 #import "GameLevelScene.h"
 #import "JSTileMap.h"
 #import "Player.h"
+#import "SKTUtils.h"
 
 @interface GameLevelScene()
 @property (nonatomic, strong) JSTileMap *map;
@@ -53,6 +54,7 @@
 //1
 - (void)update:(NSTimeInterval)currentTime
 {
+  [self setViewpointCenter:self.player.position];
   //2
   NSTimeInterval delta = currentTime - self.previousUpdateTime;
   //3
@@ -177,6 +179,17 @@
       self.player.mightAsWellJump = NO;
     }
   }
+}
+
+- (void)setViewpointCenter:(CGPoint)position {
+  NSInteger x = MAX(position.x, self.size.width / 2);
+  NSInteger y = MAX(position.y, self.size.height / 2);
+  x = MIN(x, (self.map.mapSize.width * self.map.tileSize.width) - self.size.width / 2);
+  y = MIN(y, (self.map.mapSize.height * self.map.tileSize.height) - self.size.height / 2);
+  CGPoint actualPosition = CGPointMake(x, y);
+  CGPoint centerOfView = CGPointMake(self.size.width/2, self.size.height/2);
+  CGPoint viewPoint = CGPointSubtract(centerOfView, actualPosition);
+  self.map.position = viewPoint;
 }
 
 @end
